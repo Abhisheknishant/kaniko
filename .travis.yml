@@ -76,6 +76,10 @@ jobs:
       before_install:
         - make travis-setup
         - make minikube-setup
+      install:
+        - wget https://storage.googleapis.com/pub/gsutil.tar.gz
+        - tar xfz gsutil.tar.gz -C $HOME
+        - export PATH=${PATH}:$HOME/gsutil   
       script:
         - make images
         - make push
@@ -84,16 +88,16 @@ jobs:
       name: integration-test-misc
       before_install:
         - make travis-setup
-      install:
-        - wget https://storage.googleapis.com/pub/gsutil.tar.gz
-        - tar xfz gsutil.tar.gz -C $HOME
-        - export PATH=${PATH}:$HOME/gsutil  
       script:
         - make integration-test-misc
     - arch: arm64
       name: integration-test-misc
       before_install:
         - make travis-setup
+      install:
+        - wget https://storage.googleapis.com/pub/gsutil.tar.gz
+        - tar xfz gsutil.tar.gz -C $HOME
+        - export PATH=${PATH}:$HOME/gsutil   
       script:
         - make integration-test-misc    
 
