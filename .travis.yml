@@ -26,9 +26,11 @@ jobs:
     - name: build-image-and-k8s-integration-test
       before_install:
         - wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_19.03.0~3-0~ubuntu-bionic_amd64.deb
+        - wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_19.03.0~3-0~ubuntu-bionic_amd64.deb
         - sudo apt-get purge -y docker.io docker-ce
         - sudo apt-get autoclean
         - sudo dpkg -i docker-ce-cli_19.03.0~3-0~ubuntu-bionic_amd64.deb
+        - sudo dpkg -i docker-ce_19.03.0~3-0~ubuntu-bionic_amd64.deb
         - sudo docker version
         - service docker status
         - make travis-setup
