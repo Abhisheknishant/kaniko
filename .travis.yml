@@ -1,6 +1,6 @@
 language: go
 os: linux
-dist: focal
+dist: bionic
 
 env:
   global:
@@ -10,43 +10,80 @@ go:
 go_import_path: github.com/GoogleContainerTools/kaniko
 jobs:
   include:
-    - name: unit-test
+    - arch: amd64
+      name: unit-test
       script:
         - make test
-    - name: integration-test-run
+    - dist: focal
+      virt: vm
+      group: edge
+      arch: arm64-graviton2
+      name: unit-test
+      script:
+        - make test    
+    - arch: amd64
+      name: integration-test-run
       before_install:
         - make travis-setup
       script:
         - make integration-test-run
-    - name: integration-test-layers
+    - dist: focal
+      virt: vm
+      group: edge
+      arch: arm64-graviton2
+      name: integration-test-run
+      before_install:
+        - make travis-setup
+      script:
+        - make integration-test-run
+    - arch: amd64
+      name: integration-test-layers
       before_install:
         - make travis-setup
       script:
         - make integration-test-layers
-    - name: build-image-and-k8s-integration-test
+    - dist: focal
+      virt: vm
+      group: edge
+      arch: arm64-graviton2
+      name: integration-test-layers
       before_install:
-        - wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_19.03.0~3-0~ubuntu-bionic_amd64.deb
-        - wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_19.03.0~3-0~ubuntu-bionic_amd64.deb
-        - wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/containerd.io_1.2.2-3_amd64.deb
-        - sudo apt-get purge -y docker.io docker-ce
-        - sudo apt-get autoclean
-        - sudo dpkg -i docker-ce-cli_19.03.0~3-0~ubuntu-bionic_amd64.deb
-        - sudo dpkg -i containerd.io_1.2.2-3_amd64.deb
-        - sudo dpkg -i docker-ce_19.03.0~3-0~ubuntu-bionic_amd64.deb
-        - sudo docker version
-        - service docker status
-        - export DOCKER_CLI_EXPERIMENTAL=enabled
+        - make travis-setup
+      script:
+        - make integration-test-layers
+    - arch: amd64
+      name: build-image-and-k8s-integration-test
+      before_install:
         - make travis-setup
         - make minikube-setup
       script:
         - make images
         - make push
         - make integration-test-k8s
-    - name: integration-test-misc
+    - dist: focal
+      virt: vm
+      group: edge
+      arch: arm64-graviton2
+      name: build-image-and-k8s-integration-test
+      before_install:
+        - make travis-setup
+        - make minikube-setup
+      script:
+        - make images
+        - make push
+        - make integration-test-k8s
+    - arch: amd64
+      name: integration-test-misc
       before_install:
         - make travis-setup
       script:
         - make integration-test-misc
+    - arch: arm64
+      name: integration-test-misc
+      before_install:
+        - make travis-setup
+      script:
+        - make integration-test-misc    
 
     - name: bazel amd64
       arch: amd64
