@@ -121,7 +121,10 @@ jobs:
         - bazel test  --cpu=${CPU} --curses=no --test_output=errors --test_timeout=900 $(bazel query 'attr("tags", "'${GOARCH}'", "//...")')
 
     - name: bazel arm64
-      arch: arm64
+      dist: focal
+      virt: vm
+      group: edge
+      arch: arm64-graviton2
       env: CPU=aarch64
       before_install: *before_install_multiarch
       script: *script_multiarch
