@@ -89,9 +89,9 @@ integration-test-misc:
 .PHONY: images
 images:
 	docker buildx create --name builder --use
-	docker buildx build --platform linux/amd64,linux/arm64 -t $(REGISTRY)/executor:latest -f deploy/Dockerfile .
-	docker buildx build --platform linux/amd64,linux/arm64 -t $(REGISTRY)/executor:debug -f deploy/Dockerfile_debug .
-	docker buildx build --platform linux/amd64,linux/arm64 -t $(REGISTRY)/warmer:latest -f deploy/Dockerfile_warmer .
+	docker buildx build --push --platform linux/amd64,linux/arm64 -t $(REGISTRY)/executor:latest -f deploy/Dockerfile .
+	docker buildx build --push --platform linux/amd64,linux/arm64 -t $(REGISTRY)/executor:debug -f deploy/Dockerfile_debug .
+	docker buildx build --push --platform linux/amd64,linux/arm64 -t $(REGISTRY)/warmer:latest -f deploy/Dockerfile_warmer .
 
 .PHONY: push
 push:
